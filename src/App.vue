@@ -5,8 +5,6 @@
         <span>Users card App</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn to="/">Main</v-btn>
-      <v-btn to="/users">Users</v-btn>
     </v-toolbar>
 
     <v-content>

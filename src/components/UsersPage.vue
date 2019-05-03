@@ -1,14 +1,21 @@
 <template>
   <v-container>
     <v-layout text-xs-center wrap>
-      <h1>UserPage</h1>
+      <h1>{{ getCount }}</h1>
     </v-layout>
   </v-container>
 </template>
 
 <script>
 export default {
-  data: () => ({})
+  data: () => ({
+  }),
+
+  computed: {
+    getCount() {
+      return this.$store.state.count;
+    }
+  }
 };
 </script>
 
