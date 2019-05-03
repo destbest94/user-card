@@ -17,7 +17,12 @@ export default {
   methods: {
     setCount() {
       this.$store.state.count = this.count;
-      this.$router.push('/users');
+      this.$http.get('https://randomuser.me/api/?results=' + this.count).then(response => {
+        this.$store.state.users = response.body.results;
+        this.$router.push('/users');
+      }, response => {
+        console.log(response);
+      });
     }
   }
 };
