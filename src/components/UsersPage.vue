@@ -1,7 +1,17 @@
 <template>
   <v-container>
-    <v-layout text-xs-center wrap>
-      <card-page></card-page>
+    <v-layout wrap>
+      <v-flex
+        v-for="(user, i) of getUsers"
+        :key="i" 
+        offset-sm2
+      >
+        <card-page
+          class="ma-1 pa-1" 
+          :user="user"
+        ></card-page>
+      </v-flex>
+      
     </v-layout>
   </v-container>
 </template>
@@ -18,12 +28,8 @@ export default {
   }),
 
   computed: {
-    getCount() {
-      return this.$store.state.count;
-    },
-    
     getUsers() {
-      console.log(this.$store.state.users);
+      //console.log(this.$store.state.users);
       return this.$store.state.users;
     }
   }
