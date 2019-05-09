@@ -2,10 +2,9 @@
   <v-container>
     <v-layout 
       wrap
-      v-for="(user, i) of getUsers"
+      v-for="(user, i) of users"
       :key="i"   
     >
-      {{ i }}
       <v-flex
         offset-sm2
       >
@@ -27,8 +26,11 @@ export default {
     CardPage
   },
 
-  data: () => ({
-  }),
+  data(){
+    return {
+      users: this.$store.state.users
+    }
+  },
 
   methods: {
   },

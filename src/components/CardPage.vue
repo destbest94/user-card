@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-form v-model="valid">
     <v-card max-width="650">
       <v-container fluid class="pa-1">
         <v-layout>
@@ -13,9 +13,27 @@
           
           <v-flex>
             <v-card-text class="text-sm-left pa-2">
-              <v-text-field label="Full name" v-model="info.fullName" :readonly="isChange"></v-text-field>
-              <v-text-field label="Email" v-model="info.email" :readonly="isChange"></v-text-field>
-              <v-text-field label="Phone" v-model="info.phone" :readonly="isChange"></v-text-field>
+              <v-text-field
+                label="Full name"
+                v-model="info.fullName"
+                :rules="[rules.required]"
+                :readonly="isChange"
+              ></v-text-field>
+              
+              <v-text-field
+                
+                label="Email"
+                v-model="info.email"
+                :rules="[rules.required, rules.email]"
+                :readonly="isChange"
+              ></v-text-field>
+              
+              <v-text-field
+                label="Phone"
+                v-model="info.phone"
+                :rules="[rules.required]"
+                :readonly="isChange"
+              ></v-text-field>
             </v-card-text>
           </v-flex>
         </v-layout>
@@ -38,6 +56,7 @@
             round
             outline
             color="blue"
+            :disabled="!valid"
             @click="isChange?onEdit():onSave()"
           >
             <font color="#c1c1ba">
@@ -47,16 +66,18 @@
         </v-card-actions>
       </v-container>
     </v-card>
-  </v-container>
+  </v-form>
 </template>
 
 <script>
+
 export default {
   props: [
     'id'
   ],
   data() {
     return {
+      valid: false,
       oldInfo: this.$store.state.users[this.id],
       info: {
         fullName: this.$store.state.users[this.id].name.first
@@ -64,6 +85,13 @@ export default {
         email: this.$store.state.users[this.id].email,
         phone: this.$store.state.users[this.id].phone,
         imageSrc: this.$store.state.users[this.id].picture.large
+      },
+      rules: {
+        required: value => !!value || 'Required.',
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+          return pattern.test(value) || 'Invalid e-mail.'
+        }
       },
       isChange: true,
       isDeleted: true
