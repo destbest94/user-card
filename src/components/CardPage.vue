@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="isDeleted">
+  <v-container>
     <v-card max-width="650">
       <v-container fluid class="pa-1">
         <v-layout>
@@ -23,9 +23,27 @@
         <v-divider light></v-divider>
         
         <v-card-actions class="pa-3">
-          <v-btn round outline color="red" @click="isChange?deleteUser():cancel()"><font color="#c1c1ba">{{ isChange?"Delete":"Cancel" }}</font></v-btn>
+          <v-btn
+            round
+            outline
+            color="red"
+            @click="isChange?onDelete():onCancel()"
+          >
+            <font color="#c1c1ba">
+              {{ isChange?"Delete":"Cancel" }}
+            </font>
+          </v-btn>
           <v-spacer></v-spacer>
-          <v-btn round outline color="blue" @click="isChange?change():save()"><font color="#c1c1ba">{{ isChange?"Edit":"Save" }}</font></v-btn>
+          <v-btn
+            round
+            outline
+            color="blue"
+            @click="isChange?onEdit():onSave()"
+          >
+            <font color="#c1c1ba">
+              {{ isChange?"Edit":"Save" }}
+            </font>
+          </v-btn>
         </v-card-actions>
       </v-container>
     </v-card>
@@ -35,38 +53,48 @@
 <script>
 export default {
   props: [
-    'user'
+    'id'
   ],
   data() {
     return {
+      oldInfo: this.$store.state.users[this.id],
       info: {
-        fullName: this.user.name.first + " " + this.user.name.last,
-        email: this.user.email,
-        phone: this.user.phone,
-        imageSrc: this.user.picture.large,
+        fullName: this.$store.state.users[this.id].name.first
+          + " " + this.$store.state.users[this.id].name.last,
+        email: this.$store.state.users[this.id].email,
+        phone: this.$store.state.users[this.id].phone,
+        imageSrc: this.$store.state.users[this.id].picture.large
       },
-      oldInfo: null,
       isChange: true,
       isDeleted: true
     }
   },
   methods: {
-    change() {
+    onEdit() {
       this.isChange = !this.isChange;
-      this.oldInfo = Object.assign({}, this.info);
     },
 
-    save() {
+    onSave() {
       this.isChange = !this.isChange;
+      let name = this.info.fullName.split(' ');
+      this.oldInfo.name.first = name.splice(0, 1);
+      this.oldInfo.name.last = name;
+      this.oldInfo.email = this.info.email;
+      this.oldInfo.phone = this.info.phone;
+      this.oldInfo.picture.large = this.info.imageSrc;
     },
     
-    cancel() {
-      this.info = this.oldInfo;
+    onCancel() {
       this.isChange = !this.isChange;
+      this.info.fullName = this.oldInfo.name.first + " " + this.oldInfo.name.last;
+      this.info.email = this.oldInfo.email;
+      this.info.phone = this.oldInfo.phone;
+      this.info.imageSrc = this.oldInfo.picture.large;
     },
 
-    deleteUser() {
-      this.isDeleted = !this.isDeleted;
+    onDelete() {
+      console.log(this.$store.state.users[this.id]);
+      this.$store.state.users.splice(this.id, 1);
     }
   }
 };
