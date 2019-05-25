@@ -2,17 +2,17 @@
   <v-container>
     <v-layout 
       wrap
-      v-for="(user, i) of users"
-      :key="i"   
+      v-for="(user, index) of users"
+      :key="user.email"
     >
       <v-flex
         offset-sm2
       >
         <card-page
           class="ma-1 pa-1" 
-          :id="i"
+          :id="index"
         ></card-page>
-      </v-flex>
+      </v-flex> 
       
     </v-layout>
   </v-container>
